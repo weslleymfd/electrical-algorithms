@@ -22,27 +22,24 @@
  * SOFTWARE.
  */
 
+#include <assert.h>
 #include <inttypes.h>
-#include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 
-#include "../../algorithms/sine_wave/sine_wave.h"
+#include "sine_wave_gen.h"
 
-int main(int argc, char *argv[])
+void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output)
 {
-	int nb_samples = 400;
-	float sample_rate = 8000.f;
-	float A = 100.f;
-	float f = 60.f;
-	float theta = 0.f;
-	float output[400];
+	assert(nb_samples > 0);
+	assert(sample_rate > 0);
+	assert(output);
 
-	sine_wave_f32(nb_samples, sample_rate, A, f, theta, output);
+	const float w = (2.f * M_PI * f);
+	const float sample_period = 1.f / sample_rate;
 
 	for (size_t i = 0; i < nb_samples; i++)
 	{
-		printf("%f\n", output[i]);
+		output[i] = (A * sinf(w * (i * sample_period) + theta));
 	}
-
-	return 0;
 }

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef SINE_WAVE_H_
-#define SINE_WAVE_H_
+#ifndef SINE_WAVE_GEN_H_
+#define SINE_WAVE_GEN_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -40,10 +40,10 @@ extern "C"
 	 * @param theta 		Lag in degrees
 	 * @param output 		Output array
 	 */
-	void sine_wave_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output);
+	void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // SINE_WAVE_H_
+#endif // SINE_WAVE_GEN_H_
