@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+// gcc ../../algorithms/sine_wave_gen/sine_wave_gen.c -Wall ./main.c -o ./main -lm
+
 #include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,19 +32,35 @@
 
 int main(int argc, char *argv[])
 {
-	int nb_samples = 400;
-	float sample_rate = 8000.f;
-	float A = 100.f;
-	float f = 60.f;
-	float theta = 0.f;
-	float output[400];
+    int nb_samples = 33;
+    float sample_rate = 2000.0f;
+    float A = 100.0f;
+    float f = 60.0f;
+    float theta = 0.0f;
+    float output[400];
+    float dc_offset = 15.0f;
 
-	sine_wave_gen_f32(nb_samples, sample_rate, A, f, theta, output);
+    sine_wave_gen_f32(nb_samples, sample_rate, A, f, theta, output, dc_offset);
 
-	for (size_t i = 0; i < nb_samples; i++)
-	{
-		printf("%f\n", output[i]);
-	}
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        printf("%f\n", output[i]);
+    }
 
-	return 0;
+    // int nb_samples = 400;
+    // float sample_rate = 2000.0f;
+    // float A = 32767.0f;
+    // float f = 60.0f;
+    // float theta = 0.0f;
+    // int16_t output[400];
+    // int16_t dc_offset = 0;
+
+    // sine_wave_gen_i16(nb_samples, sample_rate, A, f, theta, output, dc_offset);
+
+    // for (size_t i = 0; i < nb_samples; i++)
+    // {
+    //     printf("%d\n", output[i]);
+    // }
+
+    return 0;
 }

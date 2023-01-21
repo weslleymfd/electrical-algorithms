@@ -22,39 +22,43 @@
  * SOFTWARE.
  */
 
-#include <assert.h>
+// gcc ../../algorithms/sine_wave_gen/sine_wave_gen.c ../../algorithms/measurements/rms.c -Wall ./main.c -o ./main -lm
+
 #include <inttypes.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "sine_wave_gen.h"
+#include "../../algorithms/sine_wave_gen/sine_wave_gen.h"
+#include "../../algorithms/measurements/rms.h"
 
-void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output, float offset)
+int main(int argc, char *argv[])
 {
-    assert(nb_samples > 0);
-    assert(sample_rate > 0);
-    assert(output);
+    int nb_samples = 33;
+    float sample_rate = 2000.0f;
+    float A = 100.0f;
+    float f = 60.0f;
+    float theta = 0.0f;
+    float output[400];
+    float dc_offset = 0.0f;
 
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
+    sine_wave_gen_f32(nb_samples, sample_rate, A, f, theta, output, dc_offset);
 
-    for (size_t i = 0; i < nb_samples; i++)
-    {
-        output[i] = ((A * sinf(w * (i * sample_period) + theta)) + offset);
-    }
-}
+    float rms_measured = 0.0f;
+    float rms_expected = (A * (sqrt(2.0f) / 2.0f));
 
-void sine_wave_gen_i16(int nb_samples, float sample_rate, float A, float f, float theta, int16_t *output, int16_t offset)
-{
-    assert(nb_samples > 0);
-    assert(sample_rate > 0);
-    assert(output);
+    rms_measured = rms_from_samples_f32(nb_samples, output);
 
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
+    printf("rms1: %f error: %f%%\n", rms_measured, (((rms_measured - rms_expected) / rms_expected) * 100.0f));
 
-    for (size_t i = 0; i < nb_samples; i++)
-    {
-        output[i] = ((int16_t)(A * sinf(w * (i * sample_period) + theta)) + offset);
-    }
+    /* When using the interpolated method, we need +1 sample */
+    nb_samples += 1;
+
+    sine_wave_gen_f32(nb_samples, sample_rate, A, f, theta, output, dc_offset);
+
+    rms_measured = rms_from_samples_interpolated_f32(nb_samples, output, f, sample_rate);
+
+    printf("rms2: %f error: %f%%\n", rms_measured, (((rms_measured - rms_expected) / rms_expected) * 100.0f));
+
+    return 0;
 }

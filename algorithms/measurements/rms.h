@@ -22,39 +22,36 @@
  * SOFTWARE.
  */
 
-#include <assert.h>
-#include <inttypes.h>
-#include <math.h>
-#include <stdlib.h>
+#ifndef RMS_H_
+#define RMS_H_
 
-#include "sine_wave_gen.h"
-
-void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output, float offset)
+#ifdef __cplusplus
+extern "C"
 {
-    assert(nb_samples > 0);
-    assert(sample_rate > 0);
-    assert(output);
+#endif
 
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
+    /**
+     * @brief RMS calculation from samples
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param samples       Samples array
+     * @return              The rms value calculated from the samples
+     */
+    float rms_from_samples_f32(int nb_samples, float *samples);
 
-    for (size_t i = 0; i < nb_samples; i++)
-    {
-        output[i] = ((A * sinf(w * (i * sample_period) + theta)) + offset);
-    }
+    /**
+     * @brief RMS calculation from samples
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param samples       Samples array
+     * @param f             Frequency in Hertz
+     * @param sample_rate   Sample rate ... samples per second
+     * @return              The rms value calculated from the samples
+     */
+    float rms_from_samples_interpolated_f32(int nb_samples, float *samples, float f, int sample_rate);
+
+#ifdef __cplusplus
 }
+#endif
 
-void sine_wave_gen_i16(int nb_samples, float sample_rate, float A, float f, float theta, int16_t *output, int16_t offset)
-{
-    assert(nb_samples > 0);
-    assert(sample_rate > 0);
-    assert(output);
-
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
-
-    for (size_t i = 0; i < nb_samples; i++)
-    {
-        output[i] = ((int16_t)(A * sinf(w * (i * sample_period) + theta)) + offset);
-    }
-}
+#endif // RMS_H_

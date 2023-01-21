@@ -30,17 +30,31 @@ extern "C"
 {
 #endif
 
-	/**
-	 * @brief Sine wave generator
-	 *
-	 * @param nb_samples	Number of samples to generate
-	 * @param sample_rate 	Sample rate ... samples per second
-	 * @param A 			Amplitude of the signal
-	 * @param f 			Frequency in Hertz
-	 * @param theta 		Lag in degrees
-	 * @param output 		Output array
-	 */
-	void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output);
+    /**
+     * @brief Sine wave generator f32
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param sample_rate   Sample rate ... samples per second
+     * @param A             Amplitude of the signal
+     * @param f             Frequency in Hertz
+     * @param theta         Lag in degrees
+     * @param output        Output array
+     * @param offset        DC offset
+     */
+    void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output, float offset);
+
+    /**
+     * @brief Sine wave generator u16
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param sample_rate   Sample rate ... samples per second
+     * @param A             Amplitude of the signal
+     * @param f             Frequency in Hertz
+     * @param theta         Lag in degrees
+     * @param output        Output array
+     * @param offset        DC offset
+     */
+    void sine_wave_gen_i16(int nb_samples, float sample_rate, float A, float f, float theta, int16_t *output, int16_t offset);
 
 #ifdef __cplusplus
 }
