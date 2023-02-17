@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     float f = 60.0f;
     float theta = 0.0f;
     float output[400];
-    float dc_offset = 15.0f;
+    float dc_offset = 0.0f;
 
     sine_wave_gen_f32(nb_samples, sample_rate, A, f, theta, output, dc_offset);
 
