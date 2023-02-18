@@ -35,20 +35,24 @@ extern "C"
      *
      * @param nb_samples    Number of samples to generate
      * @param samples       Samples array
+     * @param no_offset     Remove DC component
      * @return              The rms value calculated from the samples
      */
-    float rms_from_samples_f32(int nb_samples, float *samples);
+    float rms_from_samples_f32(int nb_samples, float *samples, bool no_offset);
 
     /**
-     * @brief RMS calculation from samples
+     * @brief RMS calculation from samples interpolated
      *
      * @param nb_samples    Number of samples to generate
      * @param samples       Samples array
-     * @param f             Frequency in Hertz
+     * @param frequency     Frequency in Hertz
      * @param sample_rate   Sample rate ... samples per second
+     * @param no_offset     Remove DC component
      * @return              The rms value calculated from the samples
      */
-    float rms_from_samples_interpolated_f32(int nb_samples, float *samples, float f, int sample_rate);
+    float rms_from_samples_interpolated_f32(int nb_samples, float *samples,
+                                            float frequency, float sample_rate,
+                                            bool no_offset);
 
 #ifdef __cplusplus
 }
