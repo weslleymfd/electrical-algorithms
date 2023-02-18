@@ -45,6 +45,35 @@ void sine_wave_gen_f32(int nb_samples, float sample_rate, float amplitude,
     }
 }
 
+void sine_wave_gen_f32_harmonics(int nb_samples, float sample_rate, float amplitude,
+                                 float frequency, float theta, float *output,
+                                 float *harmonics, int nb_harmonics)
+{
+    assert(nb_samples > 0);
+    assert(sample_rate > 0);
+    assert(output);
+    assert(harmonics);
+    assert(nb_harmonics > 0);
+
+    float angular_frequency, sample_period;
+
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        output[i] = (amplitude * (harmonics[0] / 100.0f)); // DC offset
+    }
+
+    for (size_t h = 1; h < nb_harmonics; h++)
+    {
+        angular_frequency = (2.0f * M_PI * frequency * h);
+        sample_period = (1.0f / sample_rate);
+
+        for (size_t i = 0; i < nb_samples; i++)
+        {
+            output[i] += (((amplitude * (harmonics[h] / 100.0f)) * sinf(angular_frequency * (i * sample_period) + theta)));
+        }
+    }
+}
+
 void sine_wave_gen_i16(int nb_samples, float sample_rate, float amplitude,
                        float frequency, float theta, int16_t *output, int16_t offset)
 {

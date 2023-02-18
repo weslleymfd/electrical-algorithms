@@ -45,6 +45,22 @@ extern "C"
                            float frequency, float theta, float *output, float offset);
 
     /**
+     * @brief Sine wave generator f32 with harmonics
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param sample_rate   Sample rate ... samples per second
+     * @param amplitude     Amplitude of the signal
+     * @param frequency     Frequency in Hertz
+     * @param theta         Lag in degrees
+     * @param output        Output array
+     * @param harmonics     Array with harmonics percentages
+     * @param nb_harmonics  Number of harmonics (including DC and fundamental)
+     */
+    void sine_wave_gen_f32_harmonics(int nb_samples, float sample_rate, float amplitude,
+                                     float frequency, float theta, float *output,
+                                     float *harmonics, int nb_harmonics);
+
+    /**
      * @brief Sine wave generator u16
      *
      * @param nb_samples    Number of samples to generate
