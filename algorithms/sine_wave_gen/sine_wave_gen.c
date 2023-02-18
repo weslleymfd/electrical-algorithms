@@ -29,32 +29,34 @@
 
 #include "sine_wave_gen.h"
 
-void sine_wave_gen_f32(int nb_samples, float sample_rate, float A, float f, float theta, float *output, float offset)
+void sine_wave_gen_f32(int nb_samples, float sample_rate, float amplitude,
+                       float frequency, float theta, float *output, float offset)
 {
     assert(nb_samples > 0);
     assert(sample_rate > 0);
     assert(output);
 
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
+    const float angular_frequency = (2.0f * M_PI * frequency);
+    const float sample_period = (1.0f / sample_rate);
 
     for (size_t i = 0; i < nb_samples; i++)
     {
-        output[i] = ((A * sinf(w * (i * sample_period) + theta)) + offset);
+        output[i] = ((amplitude * sinf(angular_frequency * (i * sample_period) + theta)) + offset);
     }
 }
 
-void sine_wave_gen_i16(int nb_samples, float sample_rate, float A, float f, float theta, int16_t *output, int16_t offset)
+void sine_wave_gen_i16(int nb_samples, float sample_rate, float amplitude,
+                       float frequency, float theta, int16_t *output, int16_t offset)
 {
     assert(nb_samples > 0);
     assert(sample_rate > 0);
     assert(output);
 
-    const float w = (2.f * M_PI * f);
-    const float sample_period = 1.f / sample_rate;
+    const float w = (2.f * M_PI * frequency);
+    const float sample_period = (1.0f / sample_rate);
 
     for (size_t i = 0; i < nb_samples; i++)
     {
-        output[i] = ((int16_t)(A * sinf(w * (i * sample_period) + theta)) + offset);
+        output[i] = ((int16_t)(amplitude * sinf(w * (i * sample_period) + theta)) + offset);
     }
 }
