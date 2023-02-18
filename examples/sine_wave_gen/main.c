@@ -32,21 +32,21 @@
 
 int main(int argc, char *argv[])
 {
-    int nb_samples = 33;
-    float sample_rate = 2000.0f;
-    float amplitude = 100.0f;
-    float frequency = 60.0f;
-    float theta = 0.0f;
-    float output[nb_samples];
-    float dc_offset = 0.0f;
+    // int nb_samples = 33;
+    // float sample_rate = 2000.0f;
+    // float amplitude = 100.0f;
+    // float frequency = 60.0f;
+    // float theta = 0.0f;
+    // float output[nb_samples];
+    // float dc_offset = 0.0f;
 
-    sine_wave_gen_f32(nb_samples, sample_rate, amplitude, frequency, theta,
-                      output, dc_offset);
+    // sine_wave_gen_f32(nb_samples, sample_rate, amplitude, frequency, theta,
+    //                   output, dc_offset);
 
-    for (size_t i = 0; i < nb_samples; i++)
-    {
-        printf("%f\n", output[i]);
-    }
+    // for (size_t i = 0; i < nb_samples; i++)
+    // {
+    //     printf("%f\n", output[i]);
+    // }
 
     // int nb_samples = 33;
     // float sample_rate = 2000.0f;
@@ -63,6 +63,34 @@ int main(int argc, char *argv[])
     // {
     //     printf("%d\n", output[i]);
     // }
+
+    int nb_samples = 33;
+    float sample_rate = 2000.0f;
+    float amplitude = 100.0f;
+    float frequency = 60.0f;
+    float theta = 0.0f;
+    float output[nb_samples];
+    int nb_harmonics = 10;
+    float harmonics[] = {
+        0.0f,   // DC component
+        100.0f, // fundamental
+        0.0f,   // % of 2nd harmonic
+        0.0f,   // % of 3td harmonic
+        0.0f,   // % of 4th harmonic
+        0.0f,   // % of 5th harmonic
+        0.0f,   // % of 6th harmonic
+        0.0f,   // % of 7th harmonic
+        0.0f,   // % of 8th harmonic
+        0.0f,   // % of 9th harmonic
+    };
+
+    sine_wave_gen_f32_harmonics(nb_samples, sample_rate, amplitude, frequency,
+                                theta, output, harmonics, nb_harmonics);
+
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        printf("%f\n", output[i]);
+    }
 
     return 0;
 }
