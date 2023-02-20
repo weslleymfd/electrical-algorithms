@@ -69,7 +69,8 @@ void sine_wave_gen_f32_harmonics(int nb_samples, float sample_rate, float amplit
 
         for (size_t i = 0; i < nb_samples; i++)
         {
-            output[i] += (((amplitude * (harmonics[h] / 100.0f)) * sinf(angular_frequency * (i * sample_period) + theta)));
+            output[i] += (((amplitude * (harmonics[h] / 100.0f)) *
+                           sinf(angular_frequency * (i * sample_period) + theta)));
         }
     }
 }
