@@ -152,3 +152,66 @@ float rms_from_samples_interpolated_f32(int nb_samples, float *samples,
 
     return rms;
 }
+
+float sliding_rms_from_samples_interpolated_f32(int nb_samples, float *samples,
+                                                float frequency, float sample_rate,
+                                                bool no_offset)
+{
+    assert(nb_samples > 0);
+    assert(samples);
+    assert(frequency > 0);
+    assert(sample_rate > 0);
+
+    const float samples_per_cycle = (sample_rate / frequency);
+    const int total_cycles = (int)(nb_samples / samples_per_cycle);
+
+    if (total_cycles <= 0)
+    {
+        return 0.0f; // minimal samples for 1 cycle needed
+    }
+
+    float squared_samples[nb_samples];
+
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        squared_samples[i] = 0;
+    }
+
+    float avg = 0.0f;
+
+    if (no_offset == true)
+    {
+        for (size_t i = 0; i < nb_samples; i++)
+        {
+            avg += samples[i];
+        }
+
+        avg /= nb_samples;
+    }
+
+    float cycles_integer_part = 0.0f;
+    float cycles_fractional_part = modff((total_cycles * samples_per_cycle),
+                                         &cycles_integer_part);
+
+    float period_adjustment;
+    period_adjustment = ((1.0f - cycles_fractional_part) / 2.0f) * samples[nb_samples - 2];
+    period_adjustment += ((1.0f + cycles_fractional_part) / 2.0f) * samples[nb_samples - 1];
+    period_adjustment -= avg;
+    period_adjustment = powf(period_adjustment, 2.0f);
+    period_adjustment *= cycles_fractional_part;
+
+    const float inverse_nb_samples = 1.0f / (cycles_integer_part + cycles_fractional_part);
+    float rms = 0.0f;
+
+    for (size_t i = 0; i < (nb_samples - 1); i++)
+    {
+        squared_samples[i] = powf((samples[i] - avg), 2.0f);
+        rms += (inverse_nb_samples *
+                (squared_samples[i] - squared_samples[(i + 1) % nb_samples]));
+    }
+
+    rms += (inverse_nb_samples * period_adjustment);
+    rms = sqrtf(rms);
+
+    return rms;
+}

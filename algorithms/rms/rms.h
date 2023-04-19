@@ -64,6 +64,20 @@ extern "C"
                                             float frequency, float sample_rate,
                                             bool no_offset);
 
+    /**
+     * @brief Sliding RMS calculation from samples interpolated
+     *
+     * @param nb_samples    Number of samples to generate
+     * @param samples       Samples array
+     * @param frequency     Frequency in Hertz
+     * @param sample_rate   Sample rate ... samples per second
+     * @param no_offset     Remove DC component
+     * @return              The rms value calculated from the samples
+     */
+    float sliding_rms_from_samples_interpolated_f32(int nb_samples, float *samples,
+                                                    float frequency, float sample_rate,
+                                                    bool no_offset);
+
 #ifdef __cplusplus
 }
 #endif

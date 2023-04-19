@@ -71,5 +71,12 @@ int main(int argc, char *argv[])
     printf("rms3: %f error: %f%%\n", rms_measured,
            (((rms_measured - rms_expected) / rms_expected) * 100.0f));
 
+    rms_measured = sliding_rms_from_samples_interpolated_f32(nb_samples, output,
+                                                             frequency, sample_rate,
+                                                             true);
+
+    printf("rms4: %f error: %f%%\n", rms_measured,
+           (((rms_measured - rms_expected) / rms_expected) * 100.0f));
+
     return 0;
 }
