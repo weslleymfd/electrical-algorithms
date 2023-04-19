@@ -60,6 +60,45 @@ float rms_from_samples_f32(int nb_samples, float *samples, bool no_offset)
     return rms;
 }
 
+float sliding_rms_from_samples_f32(int nb_samples, float *samples, bool no_offset)
+{
+    assert(nb_samples > 0);
+    assert(samples);
+
+    float avg = 0.0f;
+
+    if (no_offset == true)
+    {
+        for (size_t i = 0; i < nb_samples; i++)
+        {
+            avg += samples[i];
+        }
+
+        avg /= nb_samples;
+    }
+
+    float squared_samples[nb_samples];
+
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        squared_samples[i] = 0;
+    }
+
+    const float inverse_nb_samples = 1.0f / nb_samples;
+    float rms = 0.0f;
+
+    for (size_t i = 0; i < nb_samples; i++)
+    {
+        squared_samples[i] = powf((samples[i] - avg), 2.0f);
+        rms += (inverse_nb_samples *
+                (squared_samples[i] - squared_samples[(i + 1) % nb_samples]));
+    }
+
+    rms = sqrtf(rms);
+
+    return rms;
+}
+
 float rms_from_samples_interpolated_f32(int nb_samples, float *samples,
                                         float frequency, float sample_rate,
                                         bool no_offset)

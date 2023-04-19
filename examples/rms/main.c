@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-// gcc ../../algorithms/sine_wave_gen/sine_wave_gen.c ../../algorithms/measurements/rms.c -Wall ./main.c -o ./main -lm
+// gcc ../../algorithms/sine_wave_gen/sine_wave_gen.c ../../algorithms/rms/rms.c -Wall ./main.c -o ./main -lm
 
 #include <inttypes.h>
 #include <math.h>
@@ -31,13 +31,13 @@
 #include <stdlib.h>
 
 #include "../../algorithms/sine_wave_gen/sine_wave_gen.h"
-#include "../../algorithms/measurements/rms.h"
+#include "../../algorithms/rms/rms.h"
 
 int main(int argc, char *argv[])
 {
     int nb_samples = 33;
     float sample_rate = 2000.0f;
-    float amplitude = 100.0f;
+    float amplitude = 127 * sqrtf(2.0f);
     float frequency = 60.0f;
     float theta = 0.0f;
     float output[nb_samples + 1]; // +1 for interpolation
@@ -54,6 +54,11 @@ int main(int argc, char *argv[])
     printf("rms1: %f error: %f%%\n", rms_measured,
            (((rms_measured - rms_expected) / rms_expected) * 100.0f));
 
+    rms_measured = sliding_rms_from_samples_f32(nb_samples, output, true);
+
+    printf("rms2: %f error: %f%%\n", rms_measured,
+           (((rms_measured - rms_expected) / rms_expected) * 100.0f));
+
     /* When using the interpolated method, we need +1 sample */
     nb_samples += 1;
 
@@ -63,7 +68,7 @@ int main(int argc, char *argv[])
     rms_measured = rms_from_samples_interpolated_f32(nb_samples, output, frequency,
                                                      sample_rate, true);
 
-    printf("rms2: %f error: %f%%\n", rms_measured,
+    printf("rms3: %f error: %f%%\n", rms_measured,
            (((rms_measured - rms_expected) / rms_expected) * 100.0f));
 
     return 0;
